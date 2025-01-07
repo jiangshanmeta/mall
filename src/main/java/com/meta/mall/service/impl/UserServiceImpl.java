@@ -8,6 +8,8 @@ import com.meta.mall.service.UserService;
 import com.meta.mall.util.MD5Utils;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -31,7 +33,35 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(MD5Utils.getMD5String(password));
+        user.setRole(1);
 
         userRepository.save(user);
     }
+
+    @Override
+    public User login(String username, String password) {
+        String md5Password = MD5Utils.getMD5String(password);
+
+        Optional<User> userOptional = userRepository.findByUsernameAndPassword(username, md5Password);
+        if (userOptional.isEmpty()) {
+            throw new MallException(MallExceptionEnum.WRONG_PASSWORD);
+        }
+
+        return userOptional.get();
+    }
+
+    @Override
+    public void updateSignature(Integer id, String signature) {
+        boolean success = userRepository.updateSignature(id, signature);
+        if (!success) {
+            throw new MallException(MallExceptionEnum.UPDATE_SIGNATURE_FAIL);
+        }
+    }
+
+    @Override
+    public boolean isAdmin(User user) {
+        return user.getRole() == 2;
+    }
+
+
 }
