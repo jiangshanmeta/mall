@@ -3,7 +3,7 @@ package com.meta.mall.service.impl;
 import com.meta.mall.exception.MallException;
 import com.meta.mall.exception.MallExceptionEnum;
 import com.meta.mall.model.pojo.User;
-import com.meta.mall.model.repository.UserRepository;
+import com.meta.mall.repository.UserRepository;
 import com.meta.mall.service.UserService;
 import com.meta.mall.util.MD5Utils;
 import org.springframework.stereotype.Service;

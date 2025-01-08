@@ -11,6 +11,9 @@ public enum MallExceptionEnum {
 
     NEED_ADMIN(10008, "not admin"),
 
+    PARAM_NULL(10009, "param shouldn't be null"),
+    CATEGORY_NAME_EXIST(10010, "category name exist"),
+
     SYSTEM_ERROR(20000, "system error");
 
 

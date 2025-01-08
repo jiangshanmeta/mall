@@ -1,4 +1,4 @@
-package com.meta.mall.model.repository;
+package com.meta.mall.repository;
 
 import com.meta.mall.model.pojo.User;
 import org.springframework.data.jdbc.repository.query.Modifying;
