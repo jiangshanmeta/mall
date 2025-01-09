@@ -4,10 +4,13 @@ import com.meta.mall.exception.MallException;
 import com.meta.mall.exception.MallExceptionEnum;
 import com.meta.mall.model.pojo.Category;
 import com.meta.mall.model.request.AddCategoryReq;
+import com.meta.mall.model.request.UpdateCategoryReq;
 import com.meta.mall.repository.CategoryRepository;
 import com.meta.mall.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -28,6 +31,36 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.save(category);
 
+    }
+
+    @Override
+    public void update(UpdateCategoryReq updateCategoryReq) {
+        if (updateCategoryReq.getName() != null) {
+            List<Category> categoryList = categoryRepository.findAllByName(updateCategoryReq.getName());
+            boolean duplicate = categoryList.stream().anyMatch((category -> {
+                return !category.getId().equals(updateCategoryReq.getId()) && category.getName().equals(updateCategoryReq.getName());
+            }));
+            if (duplicate) {
+                throw new MallException(MallExceptionEnum.CATEGORY_NAME_EXIST);
+            }
+        }
+
+        Category category = categoryRepository.findById(updateCategoryReq.getId()).orElseThrow(() -> new MallException(MallExceptionEnum.CATEGORY_NOT_EXIST));
+
+        if (updateCategoryReq.getName() != null) {
+            category.setName(updateCategoryReq.getName());
+        }
+        if (updateCategoryReq.getType() != null) {
+            category.setType(updateCategoryReq.getType());
+        }
+        if (updateCategoryReq.getOrderNum() != null) {
+            category.setOrderNum(updateCategoryReq.getOrderNum());
+        }
+        if (updateCategoryReq.getParentId() != null) {
+            category.setParentId(updateCategoryReq.getParentId());
+        }
+
+        categoryRepository.save(category);
     }
 
 }

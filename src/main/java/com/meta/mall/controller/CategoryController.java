@@ -1,10 +1,8 @@
 package com.meta.mall.controller;
 
 import com.meta.mall.common.ApiRestResponse;
-import com.meta.mall.common.Constant;
-import com.meta.mall.exception.MallExceptionEnum;
-import com.meta.mall.model.pojo.User;
 import com.meta.mall.model.request.AddCategoryReq;
+import com.meta.mall.model.request.UpdateCategoryReq;
 import com.meta.mall.service.CategoryService;
 import com.meta.mall.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -43,16 +41,43 @@ public class CategoryController {
         }
 
 
-        User currentUser = (User) session.getAttribute(Constant.MALL_USER);
-        if (currentUser == null) {
-            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
-        }
-        if (!userService.isAdmin(currentUser)) {
-            return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
-        }
+//        User currentUser = (User) session.getAttribute(Constant.MALL_USER);
+//        if (currentUser == null) {
+//            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
+//        }
+//        if (!userService.isAdmin(currentUser)) {
+//            return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
+//        }
 
         categoryService.add(addCategoryReq);
 
         return ApiRestResponse.success();
     }
+
+    @PostMapping("/admin/update")
+    public ApiRestResponse<Void> updateCategory(HttpSession session, @RequestBody UpdateCategoryReq updateCategoryReq) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<UpdateCategoryReq>> violations = validator.validate(updateCategoryReq);
+        if (!violations.isEmpty()) {
+            String msg = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
+            return ApiRestResponse.error(20000, msg);
+        }
+
+
+//        User currentUser = (User) session.getAttribute(Constant.MALL_USER);
+//        if (currentUser == null) {
+//            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
+//        }
+//        if (!userService.isAdmin(currentUser)) {
+//            return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
+//        }
+
+        categoryService.update(updateCategoryReq);
+
+        return ApiRestResponse.success();
+    }
+
+
 }
