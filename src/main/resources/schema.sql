@@ -117,7 +117,7 @@ CREATE TABLE mall_order_product (
     category_id INT,
     price INT,
     stock INT,
-    status INT,
+    status INT DEFAULT 1,
     create_time TIMESTAMP,
     update_time TIMESTAMP
 );
