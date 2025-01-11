@@ -92,5 +92,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageable);
     }
 
+    @Override
+    public Product product(Integer id) {
+        return productRepository.findById(id).orElseThrow(() -> new MallException(MallExceptionEnum.PRODUCT_NOT_EXIST));
+    }
+
 
 }

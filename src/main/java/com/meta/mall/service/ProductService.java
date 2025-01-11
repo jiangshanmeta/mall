@@ -17,4 +17,6 @@ public interface ProductService {
     void batchUpdateStatus(CategoryBatchUpdateReq categoryBatchUpdateReq);
 
     Page<Product> adminList(Pageable pageable);
+
+    Product product(Integer id);
 }
