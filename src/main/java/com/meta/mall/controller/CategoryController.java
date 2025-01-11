@@ -1,19 +1,18 @@
 package com.meta.mall.controller;
 
 import com.meta.mall.common.ApiRestResponse;
+import com.meta.mall.model.pojo.Category;
 import com.meta.mall.model.request.AddCategoryReq;
 import com.meta.mall.model.request.UpdateCategoryReq;
 import com.meta.mall.service.CategoryService;
-import com.meta.mall.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,11 +20,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    private final UserService userService;
     private final CategoryService categoryService;
 
-    public CategoryController(UserService userService, CategoryService categoryService) {
-        this.userService = userService;
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
@@ -40,14 +37,6 @@ public class CategoryController {
             return ApiRestResponse.error(20000, msg);
         }
 
-
-//        User currentUser = (User) session.getAttribute(Constant.MALL_USER);
-//        if (currentUser == null) {
-//            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
-//        }
-//        if (!userService.isAdmin(currentUser)) {
-//            return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
-//        }
 
         categoryService.add(addCategoryReq);
 
@@ -66,17 +55,20 @@ public class CategoryController {
         }
 
 
-//        User currentUser = (User) session.getAttribute(Constant.MALL_USER);
-//        if (currentUser == null) {
-//            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
-//        }
-//        if (!userService.isAdmin(currentUser)) {
-//            return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
-//        }
-
         categoryService.update(updateCategoryReq);
 
         return ApiRestResponse.success();
+    }
+
+    @DeleteMapping("/admin/delete/{id}")
+    public ApiRestResponse<Void> deleteCategory(@PathVariable Integer id) {
+        categoryService.delete(id);
+        return ApiRestResponse.success();
+    }
+
+    @GetMapping("/list")
+    public ApiRestResponse<Page<Category>> categoryList(Pageable pageable) {
+        return ApiRestResponse.success(categoryService.list(pageable));
     }
 
 

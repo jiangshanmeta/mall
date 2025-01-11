@@ -8,6 +8,8 @@ import com.meta.mall.model.request.UpdateCategoryReq;
 import com.meta.mall.repository.CategoryRepository;
 import com.meta.mall.service.CategoryService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,5 +64,21 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.save(category);
     }
+
+    @Override
+    public void delete(Integer id) {
+        boolean exist = categoryRepository.existsById(id);
+        if (exist) {
+            throw new MallException(MallExceptionEnum.CATEGORY_DELETE_FAIL);
+        }
+        categoryRepository.deleteById(id);
+
+    }
+
+    @Override
+    public Page<Category> list(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+
 
 }
