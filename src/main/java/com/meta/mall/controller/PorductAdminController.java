@@ -1,6 +1,7 @@
 package com.meta.mall.controller;
 
 import com.meta.mall.common.ApiRestResponse;
+import com.meta.mall.model.pojo.Product;
 import com.meta.mall.model.request.AddProductReq;
 import com.meta.mall.model.request.CategoryBatchUpdateReq;
 import com.meta.mall.model.request.UpdateProductReq;
@@ -9,6 +10,8 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -77,6 +80,11 @@ public class PorductAdminController {
         productService.batchUpdateStatus(categoryBatchUpdateReq);
 
         return ApiRestResponse.success();
+    }
+
+    @GetMapping("/list")
+    public ApiRestResponse<Page<Product>> list(Pageable pageable) {
+        return ApiRestResponse.success(productService.adminList(pageable));
     }
 
 }

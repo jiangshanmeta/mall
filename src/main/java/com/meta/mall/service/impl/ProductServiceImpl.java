@@ -9,6 +9,8 @@ import com.meta.mall.model.request.UpdateProductReq;
 import com.meta.mall.repository.ProductRepository;
 import com.meta.mall.service.ProductService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -83,6 +85,11 @@ public class ProductServiceImpl implements ProductService {
         products.forEach((product) -> product.setStatus(categoryBatchUpdateReq.getStatus()));
 
         productRepository.saveAll(products);
+    }
+
+    @Override
+    public Page<Product> adminList(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
 
