@@ -7,4 +7,6 @@ public interface ProductService {
     void add(AddProductReq addProductReq);
 
     void update(UpdateProductReq updateProductReq);
+
+    void delete(Integer id);
 }

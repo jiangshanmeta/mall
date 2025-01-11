@@ -66,5 +66,13 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public void delete(Integer id) {
+        if (!productRepository.existsById(id)) {
+            throw new MallException(MallExceptionEnum.PRODUCT_NOT_EXIST);
+        }
+        productRepository.deleteById(id);
+    }
+
 
 }

@@ -8,10 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,6 +52,12 @@ public class PorductAdminController {
 
         productService.update(updateProductReq);
 
+        return ApiRestResponse.success();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ApiRestResponse<Void> deleteProduct(@PathVariable Integer id) {
+        productService.delete(id);
         return ApiRestResponse.success();
     }
 
