@@ -17,6 +17,7 @@ public enum MallExceptionEnum {
     CATEGORY_NOT_EXIST(10011, "category not exist"),
     CATEGORY_DELETE_FAIL(10012, "category not exist"),
     PRODUCT_NAME_DUPLICATED(10013, "product name duplicated"),
+    PRODUCT_NOT_EXIST(10014, "product not exist"),
 
 
     SYSTEM_ERROR(20000, "system error");

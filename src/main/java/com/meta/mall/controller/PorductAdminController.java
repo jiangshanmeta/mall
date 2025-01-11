@@ -2,6 +2,7 @@ package com.meta.mall.controller;
 
 import com.meta.mall.common.ApiRestResponse;
 import com.meta.mall.model.request.AddProductReq;
+import com.meta.mall.model.request.UpdateProductReq;
 import com.meta.mall.service.ProductService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -36,6 +37,23 @@ public class PorductAdminController {
         }
 
         productService.add(addProductReq);
+
+        return ApiRestResponse.success();
+    }
+
+    @PostMapping("/update")
+    public ApiRestResponse<Void> updateProduce(@RequestBody UpdateProductReq updateProductReq) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<UpdateProductReq>> violations = validator.validate(updateProductReq);
+        if (!violations.isEmpty()) {
+            String msg = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
+            return ApiRestResponse.error(20000, msg);
+        }
+
+
+        productService.update(updateProductReq);
 
         return ApiRestResponse.success();
     }
