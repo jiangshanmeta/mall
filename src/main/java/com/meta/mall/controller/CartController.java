@@ -29,5 +29,15 @@ public class CartController {
         return ApiRestResponse.success(cartService.list(UserFilter.currentUser.getId()));
     }
 
+    @PostMapping("/update/{id}")
+    public ApiRestResponse<List<CartVO>> update(@PathVariable Integer id, @RequestParam Integer count) {
+        return ApiRestResponse.success(cartService.updateCount(id, UserFilter.currentUser.getId(), count));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ApiRestResponse<List<CartVO>> delete(@PathVariable Integer id) {
+        return ApiRestResponse.success(cartService.delete(UserFilter.currentUser.getId(), id));
+    }
+
 
 }

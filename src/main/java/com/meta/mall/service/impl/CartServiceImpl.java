@@ -85,5 +85,33 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    @Override
+    public List<CartVO> updateCount(Integer id, Integer userId, Integer count) {
+        Optional<Cart> cartOptional = cartRepository.findById(id);
+        if (cartOptional.isEmpty() || !cartOptional.get().getUserId().equals(userId)) {
+            throw new MallException(MallExceptionEnum.CART_NOT_EXIST);
+        }
+
+
+        Cart cart = cartOptional.get();
+        cart.setQuantity(count);
+
+        cartRepository.save(cart);
+
+        return list(userId);
+    }
+
+    @Override
+    public List<CartVO> delete(Integer userId, Integer cartId) {
+        Optional<Cart> cartOptional = cartRepository.findById(cartId);
+        if (cartOptional.isEmpty() || !cartOptional.get().getUserId().equals(userId)) {
+            throw new MallException(MallExceptionEnum.CART_NOT_EXIST);
+        }
+
+        cartRepository.deleteById(cartId);
+
+        return list(userId);
+    }
+
 
 }
