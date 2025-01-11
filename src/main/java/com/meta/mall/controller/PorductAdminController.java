@@ -2,6 +2,7 @@ package com.meta.mall.controller;
 
 import com.meta.mall.common.ApiRestResponse;
 import com.meta.mall.model.request.AddProductReq;
+import com.meta.mall.model.request.CategoryBatchUpdateReq;
 import com.meta.mall.model.request.UpdateProductReq;
 import com.meta.mall.service.ProductService;
 import jakarta.validation.ConstraintViolation;
@@ -58,6 +59,23 @@ public class PorductAdminController {
     @DeleteMapping("/delete/{id}")
     public ApiRestResponse<Void> deleteProduct(@PathVariable Integer id) {
         productService.delete(id);
+        return ApiRestResponse.success();
+    }
+
+
+    @PostMapping("/batchUpdateStatus")
+    public ApiRestResponse<Void> batchUpdateStatus(@RequestBody CategoryBatchUpdateReq categoryBatchUpdateReq) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<CategoryBatchUpdateReq>> violations = validator.validate(categoryBatchUpdateReq);
+        if (!violations.isEmpty()) {
+            String msg = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
+            return ApiRestResponse.error(20000, msg);
+        }
+
+        productService.batchUpdateStatus(categoryBatchUpdateReq);
+
         return ApiRestResponse.success();
     }
 

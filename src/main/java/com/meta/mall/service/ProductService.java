@@ -1,6 +1,7 @@
 package com.meta.mall.service;
 
 import com.meta.mall.model.request.AddProductReq;
+import com.meta.mall.model.request.CategoryBatchUpdateReq;
 import com.meta.mall.model.request.UpdateProductReq;
 
 public interface ProductService {
@@ -9,4 +10,6 @@ public interface ProductService {
     void update(UpdateProductReq updateProductReq);
 
     void delete(Integer id);
+
+    void batchUpdateStatus(CategoryBatchUpdateReq categoryBatchUpdateReq);
 }

@@ -4,12 +4,15 @@ import com.meta.mall.exception.MallException;
 import com.meta.mall.exception.MallExceptionEnum;
 import com.meta.mall.model.pojo.Product;
 import com.meta.mall.model.request.AddProductReq;
+import com.meta.mall.model.request.CategoryBatchUpdateReq;
 import com.meta.mall.model.request.UpdateProductReq;
 import com.meta.mall.repository.ProductRepository;
 import com.meta.mall.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -72,6 +75,14 @@ public class ProductServiceImpl implements ProductService {
             throw new MallException(MallExceptionEnum.PRODUCT_NOT_EXIST);
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void batchUpdateStatus(CategoryBatchUpdateReq categoryBatchUpdateReq) {
+        List<Product> products = productRepository.findAllById(Arrays.asList(categoryBatchUpdateReq.getIds()));
+        products.forEach((product) -> product.setStatus(categoryBatchUpdateReq.getStatus()));
+
+        productRepository.saveAll(products);
     }
 
 
