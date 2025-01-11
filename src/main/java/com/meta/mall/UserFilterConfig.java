@@ -1,23 +1,19 @@
 package com.meta.mall;
 
-import com.meta.mall.filter.AdminFilter;
+import com.meta.mall.filter.UserFilter;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AdminFilterConfig {
-
-    @Bean(name = "adminFilterConf")
-    public FilterRegistrationBean<Filter> filterRegistrationBean(AdminFilter adminFilter) {
+public class UserFilterConfig {
+    @Bean(name = "userFilterConf")
+    public FilterRegistrationBean<Filter> filterRegistrationBean(UserFilter userFilter) {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(adminFilter);
-        filterRegistrationBean.addUrlPatterns("/category/admin/*");
-        filterRegistrationBean.addUrlPatterns("/product/admin/*");
-
+        filterRegistrationBean.setFilter(userFilter);
+        filterRegistrationBean.addUrlPatterns("/cart/*");
 
         return filterRegistrationBean;
     }
-
 }

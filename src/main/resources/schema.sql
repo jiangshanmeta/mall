@@ -29,7 +29,7 @@ VALUES
 DROP TABLE IF EXISTS mall_cart;
 CREATE TABLE mall_cart (
     id INT PRIMARY KEY auto_increment,
-    produce_id INT,
+    product_id INT,
     user_id INT,
     quantity INT,
     selected INT,
