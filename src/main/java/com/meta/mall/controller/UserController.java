@@ -5,8 +5,10 @@ import com.meta.mall.common.ApiRestResponse;
 import com.meta.mall.common.Constant;
 import com.meta.mall.exception.MallExceptionEnum;
 import com.meta.mall.model.pojo.User;
+import com.meta.mall.model.response.UserVO;
 import com.meta.mall.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ApiRestResponse<User> login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession httpSession) {
+    public ApiRestResponse<UserVO> login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession httpSession) {
         if (StringUtils.isEmpty(username)) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
@@ -53,12 +55,12 @@ public class UserController {
 
         User user = userService.login(username, password);
 
-
-        user.setPassword(null);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
 
         httpSession.setAttribute(Constant.MALL_USER, user);
 
-        return ApiRestResponse.success(user);
+        return ApiRestResponse.success(userVO);
     }
 
     @PostMapping("/update")
