@@ -11,4 +11,6 @@ public interface CartRepository extends ListCrudRepository<Cart, Integer>, Pagin
     Optional<Cart> findByUserIdAndProductId(Integer userId, Integer productId);
 
     List<Cart> findAllByUserId(Integer userId);
+
+    void deleteByUserIdAndSelected(Integer userId, Integer selected);
 }

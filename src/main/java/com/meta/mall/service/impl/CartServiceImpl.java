@@ -113,5 +113,10 @@ public class CartServiceImpl implements CartService {
         return list(userId);
     }
 
+    @Override
+    public void deleteSelectedCart(Integer userId) {
+        cartRepository.deleteByUserIdAndSelected(userId, 1);
+    }
+
 
 }

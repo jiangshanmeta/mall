@@ -12,4 +12,6 @@ public interface CartService {
     List<CartVO> updateCount(Integer id, Integer userId, Integer count);
 
     List<CartVO> delete(Integer userId, Integer cartId);
+
+    void deleteSelectedCart(Integer userId);
 }

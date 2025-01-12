@@ -21,6 +21,7 @@ public enum MallExceptionEnum {
     PRODUCT_NOT_SALE(10015, "product not sale"),
     PRODUCT_NOT_ENOUGH(10016, "product not enough"),
     CART_NOT_EXIST(10017, "cart not exist"),
+    CART_SELECTED_EMPTY(10018, "cart selected empty"),
 
 
     SYSTEM_ERROR(20000, "system error");

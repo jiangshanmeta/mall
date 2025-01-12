@@ -96,7 +96,7 @@ DROP TABLE IF EXISTS mall_order_item;
 CREATE TABLE mall_order_item (
     id INT PRIMARY KEY auto_increment,
     order_no VARCHAR(128),
-    produce_id INT,
+    product_id INT,
     product_name VARCHAR(500),
     product_image VARCHAR(500),
     unit_price INT,
