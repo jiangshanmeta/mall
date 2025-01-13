@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/product/admin")
-public class PorductAdminController {
+public class ProductAdminController {
     private final ProductService productService;
 
-    public PorductAdminController(ProductService productService) {
+    public ProductAdminController(ProductService productService) {
         this.productService = productService;
     }
 
