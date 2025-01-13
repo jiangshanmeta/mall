@@ -5,6 +5,10 @@ import com.meta.mall.common.ApiRestResponse;
 import com.meta.mall.common.Constant;
 import com.meta.mall.exception.MallExceptionEnum;
 import com.meta.mall.model.pojo.User;
+import com.meta.mall.model.request.AdminLoginReq;
+import com.meta.mall.model.request.LoginReq;
+import com.meta.mall.model.request.RegisterReq;
+import com.meta.mall.model.request.UpdateSignatureReq;
 import com.meta.mall.model.response.UserVO;
 import com.meta.mall.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -27,33 +31,33 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ApiRestResponse<Void> register(@RequestParam("username") String username, @RequestParam("password") String password) {
-        if (StringUtils.isEmpty(username)) {
+    public ApiRestResponse<Void> register(@RequestBody RegisterReq registerReq) {
+        if (StringUtils.isEmpty(registerReq.getUsername())) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
-        if (StringUtils.isEmpty(password)) {
+        if (StringUtils.isEmpty(registerReq.getPassword())) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_PASSWORD);
         }
 
-        if (password.length() < 8) {
+        if (registerReq.getPassword().length() < 8) {
             return ApiRestResponse.error(MallExceptionEnum.PASSWORD_TOO_SHORT);
         }
 
-        userService.register(username, password);
+        userService.register(registerReq.getUsername(), registerReq.getPassword());
 
         return ApiRestResponse.success();
     }
 
     @PostMapping("/login")
-    public ApiRestResponse<UserVO> login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession httpSession) {
-        if (StringUtils.isEmpty(username)) {
+    public ApiRestResponse<UserVO> login(@RequestBody LoginReq loginReq, HttpSession httpSession) {
+        if (StringUtils.isEmpty(loginReq.getUsername())) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
-        if (StringUtils.isEmpty(password)) {
+        if (StringUtils.isEmpty(loginReq.getPassword())) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_PASSWORD);
         }
 
-        User user = userService.login(username, password);
+        User user = userService.login(loginReq.getUsername(), loginReq.getPassword());
 
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
@@ -64,15 +68,15 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public ApiRestResponse<Void> updateSignature(@RequestParam("signature") String signature, HttpSession httpSession) {
+    public ApiRestResponse<Void> updateSignature(@RequestBody UpdateSignatureReq updateSignatureReq, HttpSession httpSession) {
         User currentUser = (User) httpSession.getAttribute(Constant.MALL_USER);
         if (currentUser == null) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
         }
-        currentUser.setPersonalizedSignature(signature);
+        currentUser.setPersonalizedSignature(updateSignatureReq.getSignature());
 
 
-        userService.updateSignature(currentUser.getId(), signature);
+        userService.updateSignature(currentUser.getId(), updateSignatureReq.getSignature());
 
         return ApiRestResponse.success();
     }
@@ -85,15 +89,15 @@ public class UserController {
 
 
     @PostMapping("/admin/login")
-    public ApiRestResponse<User> adminLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession httpSession) {
-        if (StringUtils.isEmpty(username)) {
+    public ApiRestResponse<User> adminLogin(@RequestBody AdminLoginReq adminLoginReq, HttpSession httpSession) {
+        if (StringUtils.isEmpty(adminLoginReq.getUsername())) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
-        if (StringUtils.isEmpty(password)) {
+        if (StringUtils.isEmpty(adminLoginReq.getPassword())) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_PASSWORD);
         }
 
-        User user = userService.login(username, password);
+        User user = userService.login(adminLoginReq.getUsername(), adminLoginReq.getPassword());
         if (!userService.isAdmin(user)) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
         }
